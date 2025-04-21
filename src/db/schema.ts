@@ -9,6 +9,7 @@ import {
   bigint,
 } from "drizzle-orm/pg-core";
 
+// Needs indexes
 const advocates = pgTable("advocates", {
   id: serial("id").primaryKey(),
   firstName: text("first_name").notNull(),
@@ -18,7 +19,8 @@ const advocates = pgTable("advocates", {
   specialties: jsonb("payload").default([]).notNull(),
   yearsOfExperience: integer("years_of_experience").notNull(),
   phoneNumber: bigint("phone_number", { mode: "number" }).notNull(),
-  createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull().$onUpdate(() => new Date()),
 });
 
 export { advocates };
