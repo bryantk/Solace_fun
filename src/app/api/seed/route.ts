@@ -2,6 +2,8 @@ import db from "../../../db";
 import { advocates } from "../../../db/schema";
 import { advocateData } from "../../../db/seed/advocates";
 
+// Should be DEV only protected via rewrite or such
+
 export async function POST() {
   const records = await db.insert(advocates).values(advocateData).returning();
 

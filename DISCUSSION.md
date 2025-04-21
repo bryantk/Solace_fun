@@ -41,8 +41,17 @@
   - Stopping with seed work, would use Drizzle Generators for a real project
 - Reading Drizzle documentation
 - Setting 'updatedAt' DB based column
-
+- Updating display page search capabilities
+  - got distracted by poor code and forgot the higher goal
+  - making api endpoint for cursor based pagination (search, and default query)
+  - will need to paginate the front end
+    - https://nextjs.org/learn/dashboard-app/adding-search-and-pagination
   
+# TODO (my node is rusty)
+- Paginated table
+- When search input is blank (or all whitespace) set no where condition to post api
+- better CSS
+- get with UX and make pretty AND accessable
 
 # Beyond Scope (for now)
 - `npm audit` critical + moderate patches needed
