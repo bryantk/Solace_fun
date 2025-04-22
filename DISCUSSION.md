@@ -52,9 +52,18 @@
 - When search input is blank (or all whitespace) set no where condition to post api
 - better CSS
 - get with UX and make pretty AND accessable
+- move pagination into drizzle interface + react components
+- More models / join search fields (first + last, smarter location based, specialty models, etc)
+- show # of results out of total count on bottom of page
+- Use Generators for seed/mock data
+- Tests
+- Seperate CSS files per module/component/etc
 
 # Beyond Scope (for now)
 - `npm audit` critical + moderate patches needed
 tldr: using older versions of next.js + drizzle, update for security patches
 - Mobile friendly-ness
+- Build out models/relations better
 
+# Summary
+So much more to do, but callign it at ~3 hours. Most of the extra time was spent figthing a new windows setup, and learning drizzle/nextjs for the first time.

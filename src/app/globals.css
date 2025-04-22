@@ -9,7 +9,7 @@
   background-color: #F7EBEC;
 }
 th {
-  background: #AC9FBB;
+  background-image: linear-gradient(#d8bbd8, #ab9cbe);
   position: sticky;
   top: 0;
 }

@@ -8,49 +8,45 @@ export default function Home() {
   const [page, setPage] = useState([0]);
 
   useEffect(() => {
-    console.log("fetching advocates...");
-    getAdvocates(page)
+    getAdvocates(page).then((jsonResponse) => {
+      setAdvocates(jsonResponse.data);
+      setFilteredAdvocates(jsonResponse.data);
+    })
   }, []);
 
   async function getAdvocates(page: number=0) {
-    const response = await fetch("/api/advocates?" + new URLSearchParams({
-      cursor: page,
-    }).toString());
-
-    return response.json().then((jsonResponse) => {
-      setAdvocates(jsonResponse.data);
-      setFilteredAdvocates(jsonResponse.data);
-    });
+    const response = await fetch("/api/advocates?" + new URLSearchParams({cursor: page}).toString());
+    return response.json();
   }
 
-  const onChange = (e) => {
+  async function getAdvocatesSearch(search: string, page: number=0) {
+    const response = await fetch(
+      "/api/advocates", {
+        method: 'POST',
+        body: JSON.stringify({
+          query: search,
+          cursor: page,
+        })
+      }
+    );
+    return response.json();
+  }
+
+  const onChange = async (e) => {
     // Should filter out garbage, like all whitespace
     // Populate from params
     const searchTerm = e.target.value;
 
     document.getElementById("search-term").innerHTML = searchTerm;
-
-    console.log("filtering advocates...");
-    const filteredAdvocates = advocates.filter((advocate) => {
-      console.log(advocate.specialties);
-      const searchableTerms = [
-        advocate.firstName,
-        advocate.lastName,
-        advocate.city,
-        advocate.degree,
-        advocate.yearsOfExperience.toString()
-      ].concat(
-        advocate.specialties.join(' ')
-      ).join(' ').toLowerCase()
-      
-      return searchableTerms.includes(searchTerm.toLowerCase());
+  
+    await getAdvocatesSearch(searchTerm).then((jsonResponse) => {
+      setFilteredAdvocates(jsonResponse.data);
     });
-
-    setFilteredAdvocates(filteredAdvocates);
   };
 
   const onClick = () => {
-    console.log(advocates);
+    document.getElementById("search-term").innerHTML = '';
+    document.getElementById("search-space").value = '';
     setFilteredAdvocates(advocates);
   };
 
@@ -64,7 +60,7 @@ export default function Home() {
 
   return (
     <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
+      <h1 style={{ padding: "8px", paddingLeft: "12px", backgroundImage: "linear-gradient(to top right, #ab9cbe, #d8bbd8)" }}>Solace Advocates</h1>
       <hr />
       <br />
       <div id="search-box">
@@ -72,7 +68,7 @@ export default function Home() {
         <p>
           Searching for: <span id="search-term"></span>
         </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
+        <input id="search-space" style={{ border: "1px solid black" }} onChange={onChange} />
         <br />
         <button id="reset-button" onClick={onClick}>Reset Search</button>
       </div>
@@ -99,13 +95,13 @@ export default function Home() {
                 <td>{advocate.city}</td>
                 <td>{advocate.degree}</td>
                 <td>
-                  <div style={{ "font-size": "small", "overflow-y": "auto", "height": "150px", "padding": "5px" }}>
+                  <div style={{ fontSize: "small", overflowY: "auto", "height": "150px", "padding": "5px" }}>
                     {advocate.specialties.sort().map((s) => (
                       <div>{s}</div>
                     ))}
                   </div>
                 </td>
-                <td>{advocate.yearsOfExperience}</td>
+                <td style={{ textAlign: "center" }}>{advocate.yearsOfExperience}</td>
                 <td>{formatPhoneNumber(advocate.phoneNumber)}</td>
               </tr>
             );
